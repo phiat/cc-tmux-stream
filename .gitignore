@@ -1,0 +1,24 @@
+# Rust
+daemon/target/
+daemon/Cargo.lock
+
+# Debug files
+.debug/
+
+# Config (contains auth token)
+config.toml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Extension build artifacts
+extension/*.xpi
+extension/web-ext-artifacts/

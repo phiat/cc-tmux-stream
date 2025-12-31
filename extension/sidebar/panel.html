@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>tmux Stream</title>
+  <link rel="stylesheet" href="panel.css">
+</head>
+<body>
+  <div id="toolbar">
+    <div id="status">
+      <span id="status-indicator"></span>
+      <span id="status-text">Disconnected</span>
+    </div>
+    <select id="pane-selector" disabled>
+      <option value="">Select pane...</option>
+    </select>
+    <button id="refresh-btn" title="Refresh pane list" disabled>&#8635;</button>
+    <button id="connect-btn">Connect</button>
+  </div>
+  <div id="content-container">
+    <pre id="terminal-content"></pre>
+    <button id="scroll-bottom-btn" title="Scroll to bottom">↓</button>
+  </div>
+  <div id="input-bar">
+    <div id="quick-buttons">
+      <button class="quick-btn" data-keys="1">1</button>
+      <button class="quick-btn" data-keys="2">2</button>
+      <button class="quick-btn" data-keys="3">3</button>
+      <button class="quick-btn" data-keys="4">4</button>
+      <button class="quick-btn" data-keys="5">5</button>
+      <button class="quick-btn yes-btn" data-keys="y">Y</button>
+      <button class="quick-btn no-btn" data-keys="n">N</button>
+    </div>
+    <div id="nav-buttons">
+      <button class="nav-btn" data-keys="Up">↑</button>
+      <button class="nav-btn" data-keys="Down">↓</button>
+      <button class="nav-btn" data-keys="Left">←</button>
+      <button class="nav-btn" data-keys="Right">→</button>
+      <button class="nav-btn" data-keys="Tab">⇥</button>
+      <button class="nav-btn space-btn" data-keys="Space">␣</button>
+      <button class="nav-btn enter-btn" data-keys="Enter">⏎</button>
+    </div>
+    <div id="text-input-row">
+      <input type="text" id="text-input" placeholder="Type response..." disabled>
+      <button id="send-btn" disabled>Send</button>
+    </div>
+  </div>
+  <script src="panel.js"></script>
+</body>
+</html>
