@@ -1,10 +1,6 @@
 # tmux-stream
 
-[![GitHub](https://img.shields.io/github/license/phiat/cc-tmux-sidebar)](https://github.com/phiat/cc-tmux-sidebar)
-
 Stream tmux pane contents to a Firefox sidebar with full input support. Monitor and control Claude Code sessions or other terminal applications while browsing.
-
-**Repository:** https://github.com/phiat/cc-tmux-sidebar
 
 ![tmux-stream screenshot](docs/screenshot.png)
 
@@ -80,9 +76,7 @@ interval_ms = 150
 ## Project Structure
 
 ```
-tmux-stream/
-├── daemon/                 # Rust WebSocket server
-│   ├── Cargo.toml
+├── daemon/                 # Rust WebSocket server (tokio/axum)
 │   └── src/
 │       ├── main.rs         # Entry point
 │       ├── config.rs       # Config file handling
@@ -90,36 +84,12 @@ tmux-stream/
 │       ├── server.rs       # WebSocket server
 │       └── tmux.rs         # tmux integration
 │
-├── extension/              # Firefox extension
-│   ├── manifest.json
-│   ├── background.js
+├── extension/              # Firefox extension (Manifest V2)
 │   ├── sidebar/            # Main sidebar panel
 │   ├── options/            # Settings page
 │   └── icons/
 │
-└── README.md
-```
-
-## Protocol
-
-WebSocket JSON messages on `localhost:19475`:
-
-**Client → Server:**
-```json
-{ "type": "auth", "token": "xxx" }
-{ "type": "list" }
-{ "type": "subscribe", "target": "session:window.pane" }
-{ "type": "unsubscribe" }
-{ "type": "input", "keys": "1" }
-```
-
-**Server → Client:**
-```json
-{ "type": "auth_ok" }
-{ "type": "auth_error", "message": "..." }
-{ "type": "panes", "items": [...] }
-{ "type": "content", "data": "...", "source_cols": 120 }
-{ "type": "error", "message": "..." }
+└── docs/                   # Documentation & assets
 ```
 
 ## Requirements
