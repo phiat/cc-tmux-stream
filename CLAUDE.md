@@ -1,5 +1,7 @@
 # CLAUDE.md - Project Guide for Claude Code
 
+**Repository:** https://github.com/phiat/cc-tmux-sidebar
+
 ## Project Overview
 
 tmux-stream is a Firefox extension + Rust daemon that streams tmux pane contents to a browser sidebar with full input support. Primary use case: monitoring and controlling Claude Code sessions while browsing.

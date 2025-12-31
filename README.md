@@ -1,6 +1,12 @@
 # tmux-stream
 
+[![GitHub](https://img.shields.io/github/license/phiat/cc-tmux-sidebar)](https://github.com/phiat/cc-tmux-sidebar)
+
 Stream tmux pane contents to a Firefox sidebar with full input support. Monitor and control Claude Code sessions or other terminal applications while browsing.
+
+**Repository:** https://github.com/phiat/cc-tmux-sidebar
+
+![tmux-stream screenshot](docs/screenshot.png)
 
 ## Features
 
