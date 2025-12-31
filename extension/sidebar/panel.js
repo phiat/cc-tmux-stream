@@ -249,12 +249,21 @@
     return c;
   }
 
+  // Spinner characters to replace with stable indicator
+  const SPINNER_CHARS = /[⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏⣾⣽⣻⢿⡿⣟⣯⣷◐◓◑◒◴◷◶◵◰◳◲◱▖▘▝▗⠁⠂⠄⡀⢀⠠⠐⠈✢✦✧⟐⋆]/g;
+  const SPINNER_REPLACEMENT = '◆';
+
+  // Normalize spinners to prevent text wiggle
+  function normalizeSpinners(text) {
+    return text.replace(SPINNER_CHARS, SPINNER_REPLACEMENT);
+  }
+
   // Display terminal content with ANSI colors
   function displayContent(text) {
     // Check if user is scrolled to bottom (following mode)
     const isAtBottom = contentContainer.scrollHeight - contentContainer.scrollTop - contentContainer.clientHeight < 50;
 
-    terminalContent.innerHTML = ansiToHtml(text);
+    terminalContent.innerHTML = ansiToHtml(normalizeSpinners(text));
 
     // Auto-scroll to bottom only if user was already at bottom
     if (isAtBottom) {
