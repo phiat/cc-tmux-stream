@@ -54,6 +54,19 @@ async fn main() {
 
     info!("Starting server on {}", addr);
 
-    let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
-    axum::serve(listener, app).await.unwrap();
+    let listener = match tokio::net::TcpListener::bind(addr).await {
+        Ok(l) => l,
+        Err(e) => {
+            error!("Failed to bind to {}: {}", addr, e);
+            if e.kind() == std::io::ErrorKind::AddrInUse {
+                error!("Port {} is already in use. Is another instance running?", addr.port());
+            }
+            std::process::exit(1);
+        }
+    };
+
+    if let Err(e) = axum::serve(listener, app).await {
+        error!("Server error: {}", e);
+        std::process::exit(1);
+    }
 }

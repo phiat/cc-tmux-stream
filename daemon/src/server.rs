@@ -201,10 +201,15 @@ async fn handle_socket(socket: WebSocket, state: Arc<AppState>) {
         }
     }
 
-    // Cleanup
+    // Cleanup: abort subscription first to stop sending, then abort send_task
     if let Some(handle) = subscription {
         handle.abort();
+        // Wait briefly for task to finish
+        let _ = handle.await;
     }
-    send_task.abort();
+    // Drop tx to signal send_task to exit gracefully
+    drop(tx);
+    // Give send_task a moment to drain, then abort if needed
+    let _ = tokio::time::timeout(Duration::from_millis(100), send_task).await;
     info!("Client disconnected");
 }
