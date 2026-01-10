@@ -1,6 +1,6 @@
 [package]
 name = "cc-tmux-stream"
-version = "0.1.1"
+version = "0.2.0"
 edition = "2021"
 description = "Stream tmux pane contents via WebSocket"
 

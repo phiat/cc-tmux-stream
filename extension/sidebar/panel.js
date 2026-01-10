@@ -23,6 +23,14 @@
     token: ''
   };
 
+  // Auto-reconnect state
+  let autoReconnect = false;
+  let reconnectAttempts = 0;
+  let reconnectTimer = null;
+  let lastSubscribedPane = null;
+  const MAX_RECONNECT_ATTEMPTS = 10;
+  const RECONNECT_BASE_DELAY = 1000; // 1 second
+
   // Enable/disable input controls
   function setInputEnabled(enabled) {
     quickButtons.forEach(btn => btn.disabled = !enabled);
@@ -73,6 +81,15 @@
         paneSelector.disabled = false;
         refreshBtn.disabled = false;
         setInputEnabled(true);
+        break;
+      case 'reconnecting':
+        statusIndicator.classList.add('connecting');
+        statusText.textContent = `Reconnecting (${reconnectAttempts}/${MAX_RECONNECT_ATTEMPTS})...`;
+        connectBtn.textContent = 'Cancel';
+        connectBtn.disabled = false;
+        paneSelector.disabled = true;
+        refreshBtn.disabled = true;
+        setInputEnabled(false);
         break;
     }
   }
@@ -291,33 +308,66 @@
     }
   }
 
-  // Connect to WebSocket server
-  function connect() {
-    if (ws) {
-      ws.close();
-      ws = null;
+  // Schedule a reconnect attempt
+  function scheduleReconnect() {
+    if (reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) {
+      showMessage('Max reconnect attempts reached. Click Connect to try again.', 'error');
+      autoReconnect = false;
+      reconnectAttempts = 0;
       setStatus('disconnected');
       return;
     }
 
+    reconnectAttempts++;
+    const delay = Math.min(RECONNECT_BASE_DELAY * Math.pow(2, reconnectAttempts - 1), 30000);
+    setStatus('reconnecting');
+    showMessage(`Reconnecting in ${delay / 1000}s...`);
+
+    reconnectTimer = setTimeout(() => {
+      reconnectTimer = null;
+      doConnect();
+    }, delay);
+  }
+
+  // Cancel reconnect
+  function cancelReconnect() {
+    if (reconnectTimer) {
+      clearTimeout(reconnectTimer);
+      reconnectTimer = null;
+    }
+    autoReconnect = false;
+    reconnectAttempts = 0;
+  }
+
+  // Internal connect logic
+  function doConnect() {
     if (!settings.token) {
       showMessage('Error: No token configured. Go to extension options to set the token.', 'error');
+      autoReconnect = false;
+      setStatus('disconnected');
       return;
     }
 
     setStatus('connecting');
-    clearContent();
+    if (reconnectAttempts === 0) {
+      clearContent();
+    }
     showMessage(`Connecting to ${settings.serverUrl}...`);
 
     try {
       ws = new WebSocket(settings.serverUrl);
     } catch (e) {
       showMessage(`Error: ${e.message}`, 'error');
-      setStatus('disconnected');
+      if (autoReconnect) {
+        scheduleReconnect();
+      } else {
+        setStatus('disconnected');
+      }
       return;
     }
 
     ws.onopen = () => {
+      reconnectAttempts = 0; // Reset on successful connection
       setStatus('authenticating');
       showMessage('Connected. Authenticating...');
       ws.send(JSON.stringify({ type: 'auth', token: settings.token }));
@@ -339,9 +389,35 @@
     ws.onclose = () => {
       ws = null;
       lastContent = null;
-      setStatus('disconnected');
-      showMessage('Disconnected.');
+
+      if (autoReconnect) {
+        scheduleReconnect();
+      } else {
+        setStatus('disconnected');
+        showMessage('Disconnected.');
+      }
     };
+  }
+
+  // Connect to WebSocket server (user-initiated)
+  function connect() {
+    if (ws || reconnectTimer) {
+      // Disconnect / cancel
+      cancelReconnect();
+      if (ws) {
+        ws.close();
+        ws = null;
+      }
+      autoReconnect = false;
+      lastSubscribedPane = null;
+      setStatus('disconnected');
+      return;
+    }
+
+    // Start new connection with auto-reconnect enabled
+    autoReconnect = true;
+    reconnectAttempts = 0;
+    doConnect();
   }
 
   // Handle incoming messages
@@ -351,10 +427,16 @@
         showMessage('Authenticated successfully.', 'success');
         setStatus('connected');
         requestPaneList();
+        // Re-subscribe to last pane if reconnecting
+        if (lastSubscribedPane) {
+          showMessage(`Re-subscribing to ${lastSubscribedPane}...`);
+          subscribe(lastSubscribedPane);
+        }
         break;
 
       case 'auth_error':
         showMessage(`Authentication failed: ${msg.message}`, 'error');
+        autoReconnect = false; // Don't reconnect on auth failure
         ws.close();
         break;
 
@@ -396,8 +478,10 @@
       paneSelector.appendChild(option);
     }
 
-    // Auto-select if only one pane
-    if (panes.length === 1) {
+    // Restore selection if reconnecting, or auto-select if only one pane
+    if (lastSubscribedPane && panes.some(p => p.id === lastSubscribedPane)) {
+      paneSelector.value = lastSubscribedPane;
+    } else if (panes.length === 1) {
       paneSelector.value = panes[0].id;
       subscribe(panes[0].id);
     }
@@ -406,6 +490,7 @@
   // Subscribe to a pane
   function subscribe(target) {
     if (ws && ws.readyState === WebSocket.OPEN && target) {
+      lastSubscribedPane = target;
       lastContent = null;
       clearContent();
       showMessage(`Subscribing to ${target}...`);

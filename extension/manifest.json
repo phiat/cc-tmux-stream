@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "cc-tmux-stream",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Stream tmux panes to Firefox sidebar for monitoring agent sessions",
   "browser_specific_settings": {
     "gecko": {
