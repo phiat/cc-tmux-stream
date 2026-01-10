@@ -494,7 +494,7 @@
   // Initialize
   async function init() {
     await loadSettings();
-    showMessage('tmux Stream ready.');
+    showMessage('cc-tmux-stream ready.');
     showMessage('Click "Connect" to start streaming.');
 
     if (!settings.token) {

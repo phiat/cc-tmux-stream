@@ -37,7 +37,7 @@ async fn main() {
     // Display startup info
     println!();
     println!("========================================");
-    println!("  tmux-stream daemon");
+    println!("  cc-tmux-stream daemon");
     println!("========================================");
     println!();
     println!("  WebSocket: ws://{}:{}", config.server.host, config.server.port);

@@ -2,7 +2,7 @@
 // Currently minimal - can be extended for persistent connections
 
 browser.runtime.onInstalled.addListener(() => {
-  console.log('tmux Stream extension installed');
+  console.log('cc-tmux-stream extension installed');
 
   // Set default settings if not present
   browser.storage.local.get(['serverUrl']).then((result) => {

@@ -1,4 +1,4 @@
-# tmux-stream
+# cc-tmux-stream
 
 Stream tmux pane contents to a Firefox sidebar with full input support. Monitor and control Claude Code sessions or other terminal applications while browsing.
 
@@ -29,7 +29,7 @@ On first run, a config file is created at `~/.config/tmux-stream/config.toml` wi
 ### 2. Install the Firefox extension
 
 **Option A: Signed extension (recommended)**
-1. Download `tmux-stream-0.1.0-signed.xpi` from [Releases](https://github.com/phiat/cc-tmux-sidebar/releases)
+1. Download `tmux-stream-0.1.0-signed.xpi` from [Releases](https://github.com/phiat/cc-tmux-stream/releases)
 2. Open Firefox → File → Open File → select the .xpi
 3. Click "Add" when prompted
 

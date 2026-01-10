@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "name": "tmux Stream",
+  "name": "cc-tmux-stream",
   "version": "0.1.0",
   "description": "Stream tmux panes to Firefox sidebar for monitoring agent sessions",
   "browser_specific_settings": {
@@ -23,7 +23,7 @@
     "storage"
   ],
   "sidebar_action": {
-    "default_title": "tmux Stream",
+    "default_title": "cc-tmux-stream",
     "default_panel": "sidebar/panel.html",
     "default_icon": "icons/icon-48.svg"
   },
