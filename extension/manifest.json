@@ -3,6 +3,13 @@
   "name": "tmux Stream",
   "version": "0.1.0",
   "description": "Stream tmux panes to Firefox sidebar for monitoring agent sessions",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "tmux-stream@phiat.dev",
+      "strict_min_version": "109.0",
+      "data_collection_permissions": false
+    }
+  },
   "icons": {
     "48": "icons/icon-48.svg",
     "96": "icons/icon-96.svg"
