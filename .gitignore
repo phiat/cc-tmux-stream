@@ -22,3 +22,4 @@ Thumbs.db
 # Extension build artifacts
 extension/*.xpi
 extension/web-ext-artifacts/
+*.xpi
