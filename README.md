@@ -28,7 +28,13 @@ On first run, a config file is created at `~/.config/tmux-stream/config.toml` wi
 
 ### 2. Install the Firefox extension
 
-1. Open Firefox and navigate to `about:debugging#/runtime/this-firefox`
+**Option A: Signed extension (recommended)**
+1. Download `tmux-stream-0.1.0-signed.xpi` from [Releases](https://github.com/phiat/cc-tmux-sidebar/releases)
+2. Open Firefox → File → Open File → select the .xpi
+3. Click "Add" when prompted
+
+**Option B: Development (temporary)**
+1. Open `about:debugging#/runtime/this-firefox`
 2. Click "Load Temporary Add-on..."
 3. Select `extension/manifest.json`
 
