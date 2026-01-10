@@ -258,12 +258,21 @@
     return text.replace(SPINNER_CHARS, SPINNER_REPLACEMENT);
   }
 
+  // Safely set HTML content using DOMParser (no innerHTML assignment)
+  const domParser = new DOMParser();
+  function safeSetHtml(element, html) {
+    const doc = domParser.parseFromString('<div>' + html + '</div>', 'text/html');
+    const content = doc.body.firstChild;
+    element.replaceChildren(...content.childNodes);
+  }
+
   // Display terminal content with ANSI colors
   function displayContent(text) {
     // Check if user is scrolled to bottom (following mode)
     const isAtBottom = contentContainer.scrollHeight - contentContainer.scrollTop - contentContainer.clientHeight < 50;
 
-    terminalContent.innerHTML = ansiToHtml(normalizeSpinners(text));
+    // Use safe HTML insertion via template element
+    safeSetHtml(terminalContent, ansiToHtml(normalizeSpinners(text)));
 
     // Auto-scroll to bottom only if user was already at bottom
     if (isAtBottom) {
