@@ -222,6 +222,11 @@ button:disabled {
   border-color: #69db7c;
 }
 
+.nav-btn.ctrl-btn {
+  color: #5eb3f6;
+  border-color: #5eb3f6;
+}
+
 #text-input-row {
   display: flex;
   gap: 6px;
