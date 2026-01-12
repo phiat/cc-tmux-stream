@@ -9,7 +9,7 @@ Stream tmux pane contents to a Firefox sidebar with full input support. Monitor 
 - Real-time streaming of tmux pane content (~150ms refresh)
 - ANSI color support (256-color and true color)
 - 500 lines of scrollback history
-- Input controls: quick buttons (1-5, Y/N), navigation (arrows, Tab, Space, Enter), and text input
+- Input controls: quick buttons (1-5, Y/N), navigation (arrows, Tab, Space, Enter), control keys (Ctrl-O, Ctrl-C, Ctrl-L), and text input
 - Token-based authentication
 - Auto-discovery of all tmux sessions/windows/panes
 - Smart scroll: auto-follows output, preserves position when reviewing history
@@ -60,6 +60,9 @@ On first run, a config file is created at `~/.config/tmux-stream/config.toml` wi
 | ↑ ↓ ← → | Arrow key navigation |
 | ⇥ | Tab key |
 | ␣ | Space (toggle options) |
+| ^O | Ctrl-O (toggle output view in Claude Code) |
+| ^C | Ctrl-C (send interrupt signal) |
+| ^L | Ctrl-L (clear screen) |
 | ⏎ | Enter key |
 | Text + Send | Send custom text with Enter |
 
